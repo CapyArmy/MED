@@ -82,7 +82,7 @@ export default function HeroSection() {
             >
               <img
                 src="/assets/hero-clinic.jpg"
-                alt="Evergreen Medical Clinic interior"
+                alt="MED+ Medical Clinic interior"
                 className="w-full h-auto object-cover"
               />
             </motion.div>

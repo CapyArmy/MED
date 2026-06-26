@@ -25,15 +25,15 @@ export default function Footer() {
                 <path d="M14 8V20M8 14H20" stroke="#0D9488" strokeWidth="2.5" strokeLinecap="round" />
                 <circle cx="14" cy="14" r="11" stroke="#0D9488" strokeWidth="1.5" fill="none" />
               </svg>
-              <span className="font-['Poppins'] font-semibold text-white text-base">
-                Evergreen Medical Clinic
+              <span className="font-['Poppins'] font-bold text-white text-lg">
+                MED+ Medical Clinic
               </span>
             </div>
             <p className="text-[#94A3B8] text-sm leading-relaxed mb-3">
               Compassionate care for your family's health.
             </p>
             <p className="text-[#94A3B8] text-sm">
-              742 Evergreen Terrace, Springfield
+              2500 Health Center Drive, Springfield
             </p>
           </div>
 
@@ -89,7 +89,7 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5">
               <li className="text-[#94A3B8] text-sm">(555) 123-4567</li>
-              <li className="text-[#94A3B8] text-sm">info@evergreenclinic.com</li>
+              <li className="text-[#94A3B8] text-sm">info@medplusclinic.com</li>
               <li className="text-[#94A3B8] text-sm">Mon-Fri: 8AM-6PM</li>
             </ul>
           </div>
@@ -101,7 +101,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-[#94A3B8] text-xs">
-            &copy; 2024 Evergreen Medical Clinic. All rights reserved.
+            &copy; 2024 MED+ Medical Clinic. All rights reserved.
           </p>
           <div className="flex gap-4 text-[#94A3B8] text-xs">
             <span className="hover:text-white transition-colors duration-200 cursor-pointer">

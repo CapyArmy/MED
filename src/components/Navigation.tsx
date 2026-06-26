@@ -57,11 +57,11 @@ export default function Navigation() {
             />
             <circle cx="14" cy="14" r="11" stroke="#0D9488" strokeWidth="1.5" fill="none" />
           </svg>
-          <div className="flex items-baseline gap-1.5">
-            <span className="font-['Poppins'] font-semibold text-lg text-[#0D9488]">
-              Evergreen
+          <div className="flex items-baseline gap-2">
+            <span className="font-['Poppins'] font-bold text-xl text-[#0D9488]">
+              MED+
             </span>
-            <span className="font-['Poppins'] font-semibold text-lg text-[#4A5568]">
+            <span className="font-['Poppins'] font-medium text-base text-[#4A5568]">
               Medical Clinic
             </span>
           </div>

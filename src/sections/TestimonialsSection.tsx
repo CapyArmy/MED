@@ -22,7 +22,7 @@ export default function TestimonialsSection() {
         <SectionHeading
           label="TESTIMONIALS"
           heading="What Our Patients Say"
-          description="Hear from the families who trust us with their care."
+          description="Hear from the families who trust MED+ with their care."
           align="center"
         />
 

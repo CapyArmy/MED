@@ -16,18 +16,18 @@ const contactCards = [
     icon: Mail,
     title: "Email",
     lines: [
-      { text: "info@evergreenclinic.com", sub: "General Inquiries" },
-      { text: "appointments@evergreenclinic.com", sub: "Appointment Requests" },
+      { text: "info@medplusclinic.com", sub: "General Inquiries" },
+      { text: "appointments@medplusclinic.com", sub: "Appointment Requests" },
     ],
   },
   {
     icon: MapPin,
     title: "Clinic Address",
     lines: [
-      { text: "742 Evergreen Terrace", sub: "" },
+      { text: "2500 Health Center Drive", sub: "" },
       { text: "Springfield, ST 12345", sub: "" },
     ],
-    note: "Located at the corner of Evergreen Terrace and Main Street, with accessible parking in the rear.",
+    note: "Located at the corner of Health Center Drive and Main Street, with accessible parking in the rear.",
   },
   {
     icon: Clock,
@@ -108,15 +108,15 @@ export default function ContactInfoSection() {
               <iframe
                 src="https://www.openstreetmap.org/export/embed.html?bbox=-89.65%2C39.78%2C-89.55%2C39.82&amp;layer=mapnik&amp;marker=39.80%2C-89.60"
                 className="w-full h-full border-0"
-                title="Evergreen Medical Clinic Location"
+                title="MED+ Medical Clinic Location"
               />
               {/* Overlay Card */}
               <div className="absolute bottom-4 left-4 bg-white rounded-xl p-4 shadow-[0_4px_24px_rgba(0,0,0,0.06)] max-w-[220px]">
                 <p className="font-['Poppins'] text-sm font-semibold text-[#1A202C]">
-                  Evergreen Medical Clinic
+                  MED+ Medical Clinic
                 </p>
                 <p className="font-['Inter'] text-xs text-[#4A5568] mt-1">
-                  742 Evergreen Terrace
+                  2500 Health Center Drive
                 </p>
                 <a
                   href="https://www.openstreetmap.org/?mlat=39.80&amp;mlon=-89.60#map=15/39.80/-89.60"

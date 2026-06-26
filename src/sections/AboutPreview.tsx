@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { CheckCircle } from "lucide-react";
+import { CircleCheck as CheckCircle } from "lucide-react";
 
 const features = [
   "Board-Certified Physicians",
@@ -27,7 +27,7 @@ export default function AboutPreview() {
           >
             <img
               src="/assets/clinic-exterior.jpg"
-              alt="Evergreen Medical Clinic exterior"
+              alt="MED+ Medical Clinic exterior"
               className="w-full h-auto rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] object-cover"
             />
           </motion.div>
@@ -56,7 +56,7 @@ export default function AboutPreview() {
               transition={{ duration: 0.5, delay: 0.3, ease: [0, 0, 0.2, 1] }}
               className="font-['Inter'] text-base text-[#4A5568] leading-[1.7] mt-4"
             >
-              Evergreen Medical Clinic has been a trusted healthcare provider in Springfield for over 15 years. Our team of board-certified physicians, nurses, and specialists is committed to delivering personalized, compassionate care to patients of all ages. We believe in building lasting relationships with our patients and their families, focusing on preventive care and overall wellness.
+              MED+ Medical Clinic has been a trusted healthcare provider in Springfield for over 15 years. Our team of board-certified physicians, nurses, and specialists is committed to delivering personalized, compassionate care to patients of all ages. We believe in building lasting relationships with our patients and their families, focusing on preventive care and overall wellness.
             </motion.p>
 
             {/* Feature Grid */}

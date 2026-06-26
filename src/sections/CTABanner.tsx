@@ -23,7 +23,7 @@ export default function CTABanner() {
           transition={{ duration: 0.5, delay: 0.15, ease: [0, 0, 0.2, 1] }}
           className="font-['Inter'] text-base text-white/85 max-w-[520px] mx-auto mt-4 leading-relaxed"
         >
-          Schedule your appointment today and experience the Evergreen difference. New patients are always welcome.
+          Schedule your appointment today and experience the MED+ difference. New patients are always welcome.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 15, scale: 0.95 }}

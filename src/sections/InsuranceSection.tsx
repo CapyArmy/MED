@@ -25,7 +25,7 @@ export default function InsuranceSection() {
           className="max-w-[800px] mx-auto mt-10 bg-white rounded-2xl p-8 shadow-[0_4px_24px_rgba(0,0,0,0.06)] text-center"
         >
           <p className="font-['Inter'] text-base text-[#4A5568] leading-relaxed">
-            Evergreen Medical Clinic accepts most major insurance plans including Blue Cross Blue Shield, Aetna, Cigna, UnitedHealthcare, Medicare, and Medicaid. We also offer competitive self-pay rates for uninsured patients. Our billing team is happy to verify your coverage and explain any costs before your visit.
+            MED+ Medical Clinic accepts most major insurance plans including Blue Cross Blue Shield, Aetna, Cigna, UnitedHealthcare, Medicare, and Medicaid. We also offer competitive self-pay rates for uninsured patients. Our billing team is happy to verify your coverage and explain any costs before your visit.
           </p>
 
           <div className="flex flex-wrap justify-center gap-3 mt-6">
