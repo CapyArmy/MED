@@ -1,8 +1,9 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle } from "lucide-react";
+import { CircleCheck as CheckCircle } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
+import { supabase } from "@/lib/supabase";
 
 interface ContactFormData {
   name: string;
@@ -25,6 +26,7 @@ export default function ContactFormSection() {
   const [errors, setErrors] = useState<ContactErrors>({});
   const [submitted, setSubmitted] = useState(false);
   const [shake, setShake] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const validate = (): boolean => {
     const newErrors: ContactErrors = {};
@@ -42,13 +44,29 @@ export default function ContactFormSection() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (validate()) {
-      setSubmitted(true);
-    } else {
+    if (!validate()) {
       setShake(true);
       setTimeout(() => setShake(false), 400);
+      return;
+    }
+
+    setLoading(true);
+    const { error } = await supabase.from('contact_messages').insert({
+      name: formData.name,
+      email: formData.email,
+      subject: formData.subject,
+      message: formData.message,
+    });
+    setLoading(false);
+
+    if (error) {
+      setErrors({ submit: "Failed to send message. Please try again." });
+      setShake(true);
+      setTimeout(() => setShake(false), 400);
+    } else {
+      setSubmitted(true);
     }
   };
 
@@ -190,11 +208,17 @@ export default function ContactFormSection() {
                 </div>
 
                 <div className="pt-2">
+                  {errors.submit && (
+                    <p className="text-[#DC2626] text-xs mb-3 font-['Inter'] text-center">
+                      {errors.submit}
+                    </p>
+                  )}
                   <button
                     type="submit"
-                    className="bg-[#0D9488] text-white font-['Inter'] text-sm font-semibold tracking-[0.02em] px-7 py-3.5 rounded-xl shadow-[0_2px_8px_rgba(13,148,136,0.25)] hover:bg-[#0F766E] hover:shadow-[0_4px_16px_rgba(13,148,136,0.35)] transition-all duration-200"
+                    disabled={loading}
+                    className="bg-[#0D9488] text-white font-['Inter'] text-sm font-semibold tracking-[0.02em] px-7 py-3.5 rounded-xl shadow-[0_2px_8px_rgba(13,148,136,0.25)] hover:bg-[#0F766E] hover:shadow-[0_4px_16px_rgba(13,148,136,0.35)] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Send Message
+                    {loading ? "Sending..." : "Send Message"}
                   </button>
                 </div>
               </motion.form>

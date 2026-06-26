@@ -1,7 +1,10 @@
 import { useState, useRef } from "react";
 import type { FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle } from "lucide-react";
+import { CircleCheck as CheckCircle, LogIn } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/lib/supabase";
 
 interface FormData {
   firstName: string;
@@ -35,12 +38,13 @@ const timeSlots = [
 ];
 
 export default function AppointmentForm() {
+  const { user, profile } = useAuth();
   const [formData, setFormData] = useState<FormData>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    dob: "",
+    firstName: profile?.first_name || "",
+    lastName: profile?.last_name || "",
+    email: user?.email || "",
+    phone: profile?.phone || "",
+    dob: profile?.date_of_birth || "",
     preferredDate: "",
     department: "",
     preferredTime: "",
@@ -49,6 +53,7 @@ export default function AppointmentForm() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [showModal, setShowModal] = useState(false);
   const [shake, setShake] = useState(false);
+  const [loading, setLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   const today = new Date().toISOString().split("T")[0];
@@ -78,20 +83,47 @@ export default function AppointmentForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (validate()) {
-      setShowModal(true);
-    } else {
+    if (!validate()) {
       setShake(true);
       setTimeout(() => setShake(false), 400);
-      // Focus first error field
-      const firstErrorField = Object.keys(errors)[0];
-      if (firstErrorField) {
-        const el = document.getElementById(firstErrorField);
-        el?.scrollIntoView({ behavior: "smooth", block: "center" });
-        el?.focus();
+      return;
+    }
+
+    setLoading(true);
+
+    // Get service ID for the selected department
+    const { data: serviceData } = await supabase
+      .from('services')
+      .select('id')
+      .eq('name', formData.department)
+      .maybeSingle();
+
+    if (user) {
+      // Logged in user - save to appointments table
+      const { error } = await supabase.from('appointments').insert({
+        patient_id: user.id,
+        service_id: serviceData?.id || null,
+        appointment_date: formData.preferredDate,
+        time_slot: formData.preferredTime,
+        reason: formData.reason || null,
+        status: 'pending',
+      });
+
+      setLoading(false);
+
+      if (error) {
+        setErrors({ submit: "Failed to submit appointment. Please try again." });
+        setShake(true);
+        setTimeout(() => setShake(false), 400);
+      } else {
+        setShowModal(true);
       }
+    } else {
+      // Guest user - just show confirmation
+      setLoading(false);
+      setShowModal(true);
     }
   };
 
@@ -340,11 +372,28 @@ export default function AppointmentForm() {
 
         {/* Submit */}
         <div className="pt-4">
+          {!user && (
+            <div className="bg-[#F0F4F4] rounded-xl p-4 mb-4 flex items-center gap-3">
+              <LogIn size={20} className="text-[#0D9488] shrink-0" />
+              <p className="font-['Inter'] text-sm text-[#4A5568]">
+                <Link to="/patient-portal" className="text-[#0D9488] hover:underline font-medium">
+                  Sign in
+                </Link>{" "}
+                to track your appointments and access your health records.
+              </p>
+            </div>
+          )}
+          {errors.submit && (
+            <p className="text-[#DC2626] text-xs mb-3 font-['Inter']">
+              {errors.submit}
+            </p>
+          )}
           <button
             type="submit"
-            className="w-full sm:w-auto bg-[#0D9488] text-white font-['Inter'] text-sm font-semibold tracking-[0.02em] px-7 py-3.5 rounded-xl shadow-[0_2px_8px_rgba(13,148,136,0.25)] hover:bg-[#0F766E] hover:shadow-[0_4px_16px_rgba(13,148,136,0.35)] transition-all duration-200"
+            disabled={loading}
+            className="w-full sm:w-auto bg-[#0D9488] text-white font-['Inter'] text-sm font-semibold tracking-[0.02em] px-7 py-3.5 rounded-xl shadow-[0_2px_8px_rgba(13,148,136,0.25)] hover:bg-[#0F766E] hover:shadow-[0_4px_16px_rgba(13,148,136,0.35)] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Book Appointment
+            {loading ? "Submitting..." : "Book Appointment"}
           </button>
           <p className="font-['Inter'] text-xs font-medium uppercase tracking-[0.04em] text-[#94A3B8] mt-3">
             Our team will confirm your appointment within 24 hours via email or phone.

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const navLinks = [
   { label: "Home", path: "/" },
@@ -12,6 +13,7 @@ const navLinks = [
 ];
 
 export default function Navigation() {
+  const { user } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
@@ -90,6 +92,13 @@ export default function Navigation() {
               </Link>
             );
           })}
+          {user && (
+            <div className="flex items-center gap-2 ml-4 pl-4 border-l border-[#E2E8F0]">
+              <div className="w-8 h-8 rounded-full bg-[#0D9488] flex items-center justify-center">
+                <User size={16} className="text-white" />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Mobile Hamburger */}

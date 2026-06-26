@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { AuthProvider } from "@/hooks/useAuth";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
@@ -39,57 +40,59 @@ function App() {
   const location = useLocation();
 
   return (
-    <div className="flex flex-col min-h-[100dvh]">
-      <ScrollToTop />
-      <Navigation />
-      <main className="flex-1">
-        <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
-            <Route
-              path="/"
-              element={
-                <AnimatedPage>
-                  <HomePage />
-                </AnimatedPage>
-              }
-            />
-            <Route
-              path="/services"
-              element={
-                <AnimatedPage>
-                  <ServicesPage />
-                </AnimatedPage>
-              }
-            />
-            <Route
-              path="/book-appointment"
-              element={
-                <AnimatedPage>
-                  <AppointmentPage />
-                </AnimatedPage>
-              }
-            />
-            <Route
-              path="/patient-portal"
-              element={
-                <AnimatedPage>
-                  <PortalPage />
-                </AnimatedPage>
-              }
-            />
-            <Route
-              path="/contact"
-              element={
-                <AnimatedPage>
-                  <ContactPage />
-                </AnimatedPage>
-              }
-            />
-          </Routes>
-        </AnimatePresence>
-      </main>
-      <Footer />
-    </div>
+    <AuthProvider>
+      <div className="flex flex-col min-h-[100dvh]">
+        <ScrollToTop />
+        <Navigation />
+        <main className="flex-1">
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              <Route
+                path="/"
+                element={
+                  <AnimatedPage>
+                    <HomePage />
+                  </AnimatedPage>
+                }
+              />
+              <Route
+                path="/services"
+                element={
+                  <AnimatedPage>
+                    <ServicesPage />
+                  </AnimatedPage>
+                }
+              />
+              <Route
+                path="/book-appointment"
+                element={
+                  <AnimatedPage>
+                    <AppointmentPage />
+                  </AnimatedPage>
+                }
+              />
+              <Route
+                path="/patient-portal"
+                element={
+                  <AnimatedPage>
+                    <PortalPage />
+                  </AnimatedPage>
+                }
+              />
+              <Route
+                path="/contact"
+                element={
+                  <AnimatedPage>
+                    <ContactPage />
+                  </AnimatedPage>
+                }
+              />
+            </Routes>
+          </AnimatePresence>
+        </main>
+        <Footer />
+      </div>
+    </AuthProvider>
   );
 }
 

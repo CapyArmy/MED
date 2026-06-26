@@ -1,36 +1,49 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star } from "lucide-react";
+import { supabase, type Testimonial } from "@/lib/supabase";
 
-interface Testimonial {
-  quote: string;
-  name: string;
-  detail: string;
-}
-
-const testimonials: Testimonial[] = [
+const fallbackTestimonials = [
   {
-    quote: "The team at Evergreen Medical Clinic has been incredible. They always take the time to explain everything and make my kids feel comfortable. I wouldn't trust anyone else with my family's health.",
-    name: "Sarah Mitchell",
-    detail: "Patient since 2019",
+    quote: "The team at MED+ Medical Clinic has been incredible. They always take the time to explain everything and make my kids feel comfortable. I wouldn't trust anyone else with my family's health.",
+    patient_name: "Sarah Mitchell",
+    rating: 5,
   },
   {
     quote: "After years of feeling like just a number at other practices, I finally found a clinic that treats me like a person. Dr. Chen and her team are compassionate, thorough, and truly care.",
-    name: "Robert Thompson",
-    detail: "Patient since 2021",
+    patient_name: "Robert Thompson",
+    rating: 5,
   },
   {
     quote: "The online booking system is so convenient, and the staff is always friendly and professional. When I had an urgent issue, they got me in the same day. Highly recommend!",
-    name: "Maria Garcia",
-    detail: "Patient since 2020",
+    patient_name: "Maria Garcia",
+    rating: 5,
   },
 ];
 
 export default function TestimonialCarousel() {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isHoveredRef = useRef(false);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      const { data } = await supabase
+        .from('testimonials')
+        .select('*')
+        .eq('is_approved', true)
+        .order('display_order', { ascending: true });
+
+      if (data && data.length > 0) {
+        setTestimonials(data);
+      } else {
+        setTestimonials(fallbackTestimonials as Testimonial[]);
+      }
+    };
+    fetchTestimonials();
+  }, []);
 
   const goTo = useCallback(
     (index: number) => {
@@ -43,9 +56,10 @@ export default function TestimonialCarousel() {
   const next = useCallback(() => {
     setDirection(1);
     setCurrent((prev) => (prev + 1) % testimonials.length);
-  }, []);
+  }, [testimonials.length]);
 
   useEffect(() => {
+    if (testimonials.length === 0) return;
     intervalRef.current = setInterval(() => {
       if (!isHoveredRef.current) {
         next();
@@ -54,13 +68,17 @@ export default function TestimonialCarousel() {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [next]);
+  }, [next, testimonials.length]);
 
   const variants = {
     enter: (dir: number) => ({ x: dir > 0 ? 300 : -300, opacity: 0 }),
     center: { x: 0, opacity: 1 },
     exit: (dir: number) => ({ x: dir > 0 ? -300 : 300, opacity: 0 }),
   };
+
+  if (testimonials.length === 0) return null;
+
+  const currentTestimonial = testimonials[current];
 
   return (
     <div
@@ -81,18 +99,22 @@ export default function TestimonialCarousel() {
             className="bg-white rounded-2xl p-10 shadow-[0_4px_24px_rgba(0,0,0,0.06)] text-center"
           >
             <p className="font-['Poppins'] text-xl text-[#1A202C] italic leading-relaxed mb-6">
-              &ldquo;{testimonials[current].quote}&rdquo;
+              &ldquo;{currentTestimonial.quote}&rdquo;
             </p>
             <div className="flex justify-center gap-1 mb-4">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} size={18} className="text-[#F59E0B] fill-[#F59E0B]" />
+                <Star
+                  key={i}
+                  size={18}
+                  className={i < (currentTestimonial.rating || 5) ? "text-[#F59E0B] fill-[#F59E0B]" : "text-[#E2E8F0]"}
+                />
               ))}
             </div>
             <p className="font-['Poppins'] text-base font-semibold text-[#1A202C]">
-              {testimonials[current].name}
+              {currentTestimonial.patient_name}
             </p>
             <p className="font-['Inter'] text-sm text-[#94A3B8] mt-1">
-              {testimonials[current].detail}
+              MED+ Patient
             </p>
           </motion.div>
         </AnimatePresence>
